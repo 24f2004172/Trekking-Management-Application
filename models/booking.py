@@ -1,0 +1,63 @@
+from datetime import datetime
+from extensions import db
+
+
+class Booking(db.Model):
+    __tablename__ = "bookings"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("users.id"),
+        nullable=False
+    )
+
+    trek_id = db.Column(
+        db.Integer,
+        db.ForeignKey("treks.id"),
+        nullable=False
+    )
+
+    booking_date = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+    booking_status = db.Column(
+        db.Enum(
+            "Booked",
+            "Cancelled",
+            "Completed",
+            name="booking_status"
+        ),
+        default="Booked"
+    )
+
+    payment_status = db.Column(
+        db.Enum(
+            "Pending",
+            "Paid",
+            "Failed",
+            name="payment_status"
+        ),
+        default="Pending"
+    )
+
+    number_of_people = db.Column(
+        db.Integer,
+        default=1
+    )
+
+    user = db.relationship(
+        "User",
+        back_populates="bookings"
+    )
+
+    trek = db.relationship(
+        "Trek",
+        back_populates="bookings"
+    )
+
+    def __repr__(self):
+        return f"<Booking {self.id}>"
