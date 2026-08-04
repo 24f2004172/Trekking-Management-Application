@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Trekker</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+    <div id="register">
+        <form @submit.prevent="register_trekker">
+            <label>Name: </label>
+            <input type="text" v-model="name">
+
+            <label>Email: </label>
+            <input type="email" v-model="email">
+
+            <label>Phone: </label>
+            <input type="number" maxlength="10" v-model="phone">
+
+            <label>Password: </label>
+            <input type="password" v-model="password">
+
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
