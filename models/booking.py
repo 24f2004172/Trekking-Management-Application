@@ -59,5 +59,16 @@ class Booking(db.Model):
         back_populates="bookings"
     )
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "trek_id": self.trek_id,
+            "booking_date": self.booking_date.isoformat() if self.booking_date else None,
+            "booking_status": self.booking_status,
+            "payment_status": self.payment_status,
+            "number_of_people": self.number_of_people
+        }
+
     def __repr__(self):
         return f"<Booking {self.id}>"

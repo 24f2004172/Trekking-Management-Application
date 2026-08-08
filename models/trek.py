@@ -61,5 +61,22 @@ class Trek(db.Model):
         cascade="all, delete-orphan"
     )
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "trek_name": self.trek_name,
+            "location": self.location,
+            "description": self.description,
+            "difficulty": self.difficulty,
+            "duration": self.duration,
+            "total_slots": self.total_slots,
+            "available_slots": self.available_slots,
+            "start_date": self.start_date.isoformat() if self.start_date else None,
+            "end_date": self.end_date.isoformat() if self.end_date else None,
+            "status": self.status,
+            "assigned_staff_id": self.assigned_staff_id,
+            "created_at": self.created_at.isoformat() if self.created_at else None
+        }
+
     def __repr__(self):
         return f"<Trek {self.trek_name}>"

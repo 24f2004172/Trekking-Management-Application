@@ -15,27 +15,27 @@
 
 export default {
 
-    name: 'SearchBar',
+  name: 'SearchBar',
 
-    props: {
+  props: {
 
-        value: {
+    value: {
 
-            type: String,
+      type: String,
 
-            default: ''
+      default: ''
 
-        },
+    },
 
-        placeholder: {
+    placeholder: {
 
-            type: String,
+      type: String,
 
-            default: 'Search...'
-
-        }
+      default: 'Search...'
 
     }
+
+  }
 
 }
 

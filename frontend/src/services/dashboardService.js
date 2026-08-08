@@ -2,7 +2,7 @@ const BASE_URL = 'http://127.0.0.1:5000'
 
 export async function getDashboardData () {
   // const token = localStorage.getItem('token')
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4NjEwNDg3MiwianRpIjoiNzJlNjdhODYtYTRjMS00ODBjLWJkZWQtY2MzNDg3ZjY3YmE1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3ODYxMDQ4NzIsImNzcmYiOiJiNzhmOWY1Ni00YmFkLTRjMzAtYTAyMS0wOGZkMWI4NjA3ZDciLCJleHAiOjE3ODYxMzM2NzIsInJvbGUiOiJBZG1pbiJ9.cMfJquG-Smh5eR2I_6aVDYsDkyg5-KRBpELt8TkrMN4'
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4NjIwNTA5MiwianRpIjoiNmQ2YzJmYmYtMTZkYi00ODllLThlM2YtMjI2N2VkNzc1NzM3IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3ODYyMDUwOTIsImNzcmYiOiJmZDY5OGVjNi0yOTE5LTQ5MWEtOTNiMy1lMGFjY2RjYmYwMzMiLCJleHAiOjE3ODYyMzM4OTIsInJvbGUiOiJBZG1pbiJ9.SHLjc4LIwxX9PZC5eWpyxWB776ExTxWxmBHpp3IBIko'
 
   const response = await fetch(`${BASE_URL}/api/admin/dashboard`, {
     method: 'GET',
