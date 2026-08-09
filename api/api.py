@@ -167,6 +167,7 @@ def post_trek():
             "message": "Available_slot must less than total_slots"
         }), 400
 
+    image_url = data.get('image_url', '/images/hampta.jpg')
     date_string = data.get('start_date')
     parsed_date = date.fromisoformat(date_string)
     
@@ -182,7 +183,8 @@ def post_trek():
                 assigned_staff_id = data.get('assigned_staff_id'),
                 start_date = parsed_date,
                 description = data.get('description'),
-                status = data.get('status')
+                status = data.get('status'),
+                image_url = image_url
             )
         else:
             new_trek = Trek(
@@ -194,7 +196,8 @@ def post_trek():
                 available_slots = data.get('available_slots'),
                 assigned_staff_id = data.get('assigned_staff_id'),
                 start_date = parsed_date,
-                description = data.get('description')
+                description = data.get('description'),
+                image_url = image_url
             )
     else:
         new_trek = Trek(
@@ -205,7 +208,8 @@ def post_trek():
             total_slots = data.get('total_slots'),
             available_slots = data.get('available_slots'),
             assigned_staff_id = data.get('assigned_staff_id'),
-            start_date = parsed_date
+            start_date = parsed_date,
+            image_url = image_url
         )
 
     db.session.add(new_trek)
@@ -233,7 +237,7 @@ def put_trek(id):
     updatable_fields = {
         'trek_name', 'location', 'description', 'difficulty',
         'duration', 'total_slots', 'available_slots',
-        'start_date', 'end_date', 'status', 'assigned_staff_id'
+        'start_date', 'end_date', 'status', 'assigned_staff_id', 'image_url'
     }
 
     for field, value in data.items():
@@ -439,7 +443,7 @@ def get_users():
 
     return jsonify({
         "success": True,
-        "message": "All Staff data accessed.",
+        "message": "All User data accessed.",
         "data": user_data
     }), 200
 

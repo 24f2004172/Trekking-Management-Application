@@ -40,6 +40,37 @@ def get_dashboard():
         "data": trek_data
     }), 201
 
+@apiStaff.route('/trek/<int:id>/details')
+@jwt_required()
+@role_required('Staff')
+def get_trek_details(id):
+    trek = Trek.query.get(id)
+
+    if not trek:
+        return jsonify({
+            "success": False,
+            "message": f"Invalid trek id: {id}"
+        })
+
+    staff_id = get_jwt_identity()
+
+    if trek.assigned_staff_id != int(staff_id):
+        return jsonify({
+            "success": False,
+            "message": "You are not assigned to this trek"
+        }), 403
+
+    return jsonify({
+        "success": True,
+        "message": "Trek details accessed successfully.",
+        "data": {
+            "id": trek.id,
+            "trek_name": trek.trek_name,
+            "image_url": trek.image_url
+        }
+    }), 201
+
+
 @apiStaff.route('/trek/<int:id>/participants')
 @jwt_required()
 @role_required('Staff')

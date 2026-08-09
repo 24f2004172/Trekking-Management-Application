@@ -67,7 +67,9 @@ class Booking(db.Model):
             "booking_date": self.booking_date.isoformat() if self.booking_date else None,
             "booking_status": self.booking_status,
             "payment_status": self.payment_status,
-            "number_of_people": self.number_of_people
+            "number_of_people": self.number_of_people,
+            "trek_name": self.trek.trek_name if self.trek else None,
+            "trek_image": self.trek.image_url if self.trek else None
         }
 
     def __repr__(self):

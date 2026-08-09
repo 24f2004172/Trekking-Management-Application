@@ -20,6 +20,19 @@ export async function getDashboard () {
   return result.data || result
 }
 
+export async function getTrekDetails (trekId) {
+  const response = await fetch(`${BASE_URL}/trek/${trekId}/details`, {
+    headers: getHeaders()
+  })
+
+  if (!response.ok) {
+    throw new Error('Unable to fetch trek details')
+  }
+
+  const result = await response.json()
+  return result.data || result
+}
+
 export async function getParticipants (trekId) {
   const response = await fetch(`${BASE_URL}/trek/${trekId}/participants`, {
     headers: getHeaders()

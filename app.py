@@ -6,6 +6,7 @@ from flask_cors import CORS
 from routes.main import main
 from api.api import api
 from api.api_staff import apiStaff
+from api.api_user import apiUser
 
 
 def create_app():
@@ -36,6 +37,7 @@ def create_app():
     app.register_blueprint(main)
     app.register_blueprint(api, url_prefix='/api')
     app.register_blueprint(apiStaff, url_prefix='/api/staff')
+    app.register_blueprint(apiUser, url_prefix='/api/user')
 
     with app.app_context():
         db.create_all()

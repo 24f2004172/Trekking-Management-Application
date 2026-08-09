@@ -7,12 +7,24 @@ function getHeaders () {
   }
 }
 
+async function handleResponse (response) {
+  const data = await response.json().catch(() => null)
+
+  if (!response.ok) {
+    const error = new Error(data?.message || response.statusText || 'Request failed')
+    error.response = { data, status: response.status, statusText: response.statusText }
+    throw error
+  }
+
+  return data
+}
+
 export async function getAllUsers () {
   const response = await fetch(BASE_URL, {
     headers: getHeaders()
   })
 
-  return await response.json()
+  return await handleResponse(response)
 }
 
 export async function updateUserStatus (id, isActive) {
@@ -27,5 +39,5 @@ export async function updateUserStatus (id, isActive) {
     }
   )
 
-  return await response.json()
+  return await handleResponse(response)
 }

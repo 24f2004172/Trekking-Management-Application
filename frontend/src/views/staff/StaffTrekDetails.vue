@@ -11,6 +11,23 @@
 
         <div class="card-body">
 
+            <div v-if="trek" class="d-flex align-items-center gap-3 mb-3">
+
+                <img
+                    v-if="trek.image_url"
+                    :src="trek.image_url"
+                    alt="Trek image"
+                    class="rounded"
+                    style="width: 120px; height: 80px; object-fit: cover;"
+                >
+
+                <div>
+                    <h5 class="mb-1">{{ trek.trek_name }}</h5>
+                    <p class="text-muted mb-0">Current status: {{ selectedStatus }}</p>
+                </div>
+
+            </div>
+
             <label class="form-label">
                 Trek Status
             </label>
@@ -51,6 +68,7 @@
 <script>
 
 import {
+  getTrekDetails,
   getParticipants,
   updateStatus
 } from '@/services/staffServiceStaff'
@@ -67,6 +85,8 @@ export default {
 
   data () {
     return {
+
+      trek: null,
 
       participants: [],
 
@@ -100,9 +120,14 @@ export default {
       try {
         const trekId = this.$route.params.id
 
-        const data = await getParticipants(trekId)
+        const [trekData, participantData] = await Promise.all([
+          getTrekDetails(trekId),
+          getParticipants(trekId)
+        ])
 
-        this.participants = data
+        this.trek = trekData
+        this.participants = participantData
+        this.selectedStatus = this.trek?.status || 'Open'
       } catch (err) {
         console.error(err)
       }

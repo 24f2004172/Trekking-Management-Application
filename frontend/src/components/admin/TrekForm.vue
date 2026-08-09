@@ -188,6 +188,45 @@
           <div class="mb-3">
 
             <label class="form-label">
+              Trek Image
+            </label>
+
+            <select
+              v-model="form.image_url"
+              class="form-select"
+              required
+            >
+              <option value="">
+                Select Image
+              </option>
+
+              <option
+                v-for="image in imageOptions"
+                :key="image.value"
+                :value="image.value"
+              >
+                {{ image.label }}
+              </option>
+
+            </select>
+
+            <div
+              v-if="form.image_url"
+              class="mt-2"
+            >
+              <img
+                :src="form.image_url"
+                alt="Selected trek image"
+                class="img-fluid rounded"
+                style="max-height: 140px; object-fit: cover;"
+              >
+            </div>
+
+          </div>
+
+          <div class="mb-3">
+
+            <label class="form-label">
               Status
             </label>
 
@@ -273,6 +312,18 @@ export default {
   data () {
     return {
 
+      imageOptions: [
+        { label: 'Hampta', value: '/images/hampta.jpg' },
+        { label: 'Beach', value: '/images/beach.jpg' },
+        { label: 'Everest', value: '/images/everest.jpg' },
+        { label: 'Jagannath', value: '/images/jagannath.jpg' },
+        { label: 'Jaipur', value: '/images/jaipur.jpg' },
+        { label: 'Kedarnath', value: '/images/kedarnath.jpg' },
+        { label: 'Rameshwaram', value: '/images/rameshwaram.jpg' },
+        { label: 'Roopkund', value: '/images/roopkund.jpg' },
+        { label: 'Valley of Flowers', value: '/images/valley-of-flowers.jpg' }
+      ],
+
       form: {
         id: null,
         trek_name: '',
@@ -285,6 +336,7 @@ export default {
         assigned_staff_id: null,
         start_date: '',
         end_date: '',
+        image_url: '/images/hampta.jpg',
         status: ''
       }
 
@@ -295,7 +347,8 @@ export default {
     if (this.isEdit) {
       this.form = {
         ...this.form,
-        ...this.trek
+        ...this.trek,
+        image_url: this.trek.image_url || '/images/hampta.jpg'
       }
 
       if (this.form.start_date) {

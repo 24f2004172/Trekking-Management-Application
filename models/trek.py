@@ -40,6 +40,12 @@ class Trek(db.Model):
         default="Pending"
     )
 
+    image_url = db.Column(
+        db.String(255),
+        nullable=False,
+        default="/images/hampta.jpg"
+    )
+
     assigned_staff_id = db.Column(
         db.Integer,
         db.ForeignKey("users.id")
@@ -74,6 +80,7 @@ class Trek(db.Model):
             "start_date": self.start_date.isoformat() if self.start_date else None,
             "end_date": self.end_date.isoformat() if self.end_date else None,
             "status": self.status,
+            "image_url": self.image_url,
             "assigned_staff_id": self.assigned_staff_id,
             "created_at": self.created_at.isoformat() if self.created_at else None
         }

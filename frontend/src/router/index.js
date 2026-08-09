@@ -15,6 +15,14 @@ import Reports from '../views/admin/Reports.vue'
 import StaffDashboard from '@/views/staff/StaffDashboard.vue'
 import StaffTrekDetails from '@/views/staff/StaffTrekDetails.vue'
 
+import UserLayout from '@/layouts/UserLayout.vue'
+import BrowseTreks from '@/views/user/BrowseTreks.vue'
+import TrekDetails from '@/views/user/TrekDetails.vue'
+import MyBookings from '@/views/user/MyBookings.vue'
+import UserDashboard from '@/views/user/UserDashboard.vue'
+import History from '@/views/user/History.vue'
+import Profile from '@/views/user/Profile.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -72,6 +80,45 @@ const routes = [
     path: '/staff/trek/:id',
     name: 'StaffTrekDetails',
     component: StaffTrekDetails
+  },
+
+  {
+    path: '/user',
+    component: UserLayout,
+
+    children: [
+
+      {
+        path: 'dashboard',
+        component: UserDashboard
+      },
+
+      {
+        path: 'treks',
+        component: BrowseTreks
+      },
+
+      {
+        path: 'trek/:id',
+        component: TrekDetails
+      },
+
+      {
+        path: 'bookings',
+        component: MyBookings
+      },
+
+      {
+        path: 'history',
+        component: History
+      },
+
+      {
+        path: 'profile',
+        component: Profile
+      }
+
+    ]
   }
 ]
 
