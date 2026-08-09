@@ -12,6 +12,9 @@ import Users from '../views/admin/Users.vue'
 import Bookings from '../views/admin/Bookings.vue'
 import Reports from '../views/admin/Reports.vue'
 
+import StaffDashboard from '@/views/staff/StaffDashboard.vue'
+import StaffTrekDetails from '@/views/staff/StaffTrekDetails.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -58,8 +61,18 @@ const routes = [
       }
 
     ]
-  }
+  },
 
+  {
+    path: '/staff/dashboard',
+    name: 'StaffDashboard',
+    component: StaffDashboard
+  },
+  {
+    path: '/staff/trek/:id',
+    name: 'StaffTrekDetails',
+    component: StaffTrekDetails
+  }
 ]
 
 export default new VueRouter({

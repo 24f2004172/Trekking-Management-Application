@@ -87,7 +87,7 @@ def login():
         additional_claims={
             "role": existing_user.role
         },
-        expires_delta=timedelta(hours=8)
+        expires_delta=timedelta(hours=24)
     )
 
     return jsonify({
@@ -516,20 +516,20 @@ def updata_status(id):
     
 
 
-@api.route("/staff/dashboard")
-@jwt_required()
-@role_required("Staff")
-def staff_dashboard():
+# @api.route("/staff/dashboard")
+# @jwt_required()
+# @role_required("Staff")
+# def staff_dashboard():
 
-    return jsonify({
-        "message": "Welcome Staff"
-    })
+#     return jsonify({
+#         "message": "Welcome Staff"
+#     })
 
-@api.route("/trekker/dashboard")
-@jwt_required()
-@role_required("Trekker")
-def trekker_dashboard():
+# @api.route("/trekker/dashboard")
+# @jwt_required()
+# @role_required("Trekker")
+# def trekker_dashboard():
 
-    return jsonify({
-        "message": "Welcome Trekker"
-    })
+#     return jsonify({
+#         "message": "Welcome Trekker"
+#     })

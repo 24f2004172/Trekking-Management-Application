@@ -105,8 +105,8 @@ export default {
       }
     },
 
-    openEditModal (staff) {
-      this.selectedBooking = { ...this.booking }
+    openEditModal (booking) {
+      this.selectedBooking = { ...booking }
 
       this.showModal = true
     },
