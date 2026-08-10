@@ -1,9 +1,10 @@
 const BASE_URL = 'http://127.0.0.1:5000/api/user'
 
 function getHeaders () {
+  const token = localStorage.getItem('token')
   return {
     'Content-Type': 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4NjI4NTcxMiwianRpIjoiNTAwOWMyMjYtMzE2YS00ZGI5LWE2YTItM2RiOTAwZWMxZTBjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjYiLCJuYmYiOjE3ODYyODU3MTIsImNzcmYiOiI2MDlkNjk3Ny02OTU0LTRlYjktYTkxOC0xNGM1NjI5ZmRhOWMiLCJleHAiOjE3ODYzNzIxMTIsInJvbGUiOiJUcmVra2VyIn0.2jW1-PFs90zn9eJX0Z1fM4S_YORL2Ip7SMv9jxyKUtQ'
+    Authorization: `Bearer ${token}`
   }
 }
 
@@ -64,6 +65,14 @@ export async function createBooking (payload) {
 
 export async function getBookings () {
   const response = await fetch(`${BASE_URL}/bookings`, {
+    headers: getHeaders()
+  })
+
+  return await handleResponse(response)
+}
+
+export async function cancelBooking (id) {
+  const response = await fetch(`${BASE_URL}/booking/${id}/cancel`, {
     headers: getHeaders()
   })
 

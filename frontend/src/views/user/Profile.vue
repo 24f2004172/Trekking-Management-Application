@@ -39,7 +39,7 @@
 
                     <div class="mb-3">
 
-                        <label>Mobile</label>
+                        <label>Phone</label>
 
                         <input
                             v-model="form.phone"

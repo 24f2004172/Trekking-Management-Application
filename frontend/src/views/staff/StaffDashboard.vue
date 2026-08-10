@@ -1,36 +1,28 @@
 <template>
 
-<div class="container mt-4">
+  <div class="container mt-4">
 
-    <PageHeader
-        title="Staff Dashboard"
-        subtitle="Manage assigned treks"
-    />
+    <PageHeader title="Staff Dashboard" subtitle="Manage assigned treks" />
 
-    <SearchBar
-        v-model="search"
-        placeholder="Search Trek..."
-    />
+    <button class="btn btn-outline-light w-100" @click="logout">
+      Logout
+    </button>
 
-    <DataTable
-        :columns="columns"
-        :rows="filteredTreks"
-    >
+    <SearchBar v-model="search" placeholder="Search Trek..." />
 
-        <template #actions="{ row }">
+    <DataTable :columns="columns" :rows="filteredTreks">
 
-            <router-link
-                :to="`/staff/trek/${row.id}`"
-                class="btn btn-sm btn-primary"
-            >
-                Manage
-            </router-link>
+      <template #actions="{ row }">
 
-        </template>
+        <router-link :to="`/staff/trek/${row.id}`" class="btn btn-sm btn-primary">
+          Manage
+        </router-link>
+
+      </template>
 
     </DataTable>
 
-</div>
+  </div>
 
 </template>
 
@@ -54,7 +46,6 @@ export default {
 
   data () {
     return {
-
       search: '',
 
       treks: [],
@@ -87,7 +78,6 @@ export default {
   },
 
   computed: {
-
     filteredTreks () {
       return this.treks.filter(trek =>
         trek.trek_name
@@ -95,19 +85,23 @@ export default {
           .includes(this.search.toLowerCase())
       )
     }
+  },
 
+  methods: {
+    logout () {
+      localStorage.clear()
+      this.$router.push('/')
+    }
   },
 
   async mounted () {
     try {
       const data = await getDashboard()
-
       this.treks = data
     } catch (err) {
       console.error(err)
     }
   }
-
 }
 
 </script>

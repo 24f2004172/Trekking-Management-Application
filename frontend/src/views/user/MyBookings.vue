@@ -1,114 +1,91 @@
 <template>
 
-<div class="container py-4">
+    <div class="container py-4">
 
-    <div class="mb-4">
+        <div class="mb-4">
 
-        <h2 class="fw-bold">
-            My Bookings
-        </h2>
+            <h2 class="fw-bold">
+                My Bookings
+            </h2>
 
-        <p class="text-muted">
-            Track all your trekking adventures
-        </p>
+            <p class="text-muted">
+                Track all your trekking adventures
+            </p>
 
-    </div>
+        </div>
 
-    <div
-        v-if="loading"
-        class="text-center py-5"
-    >
-        <div
-            class="spinner-border text-success"
-            role="status"
-        ></div>
-    </div>
+        <div v-if="loading" class="text-center py-5">
+            <div class="spinner-border text-success" role="status"></div>
+        </div>
 
-    <div
-        v-else-if="bookings.length === 0"
-        class="text-center py-5"
-    >
+        <div v-else-if="bookings.length === 0" class="text-center py-5">
 
-        <h5>
-            No Bookings Yet
-        </h5>
+            <h5>
+                No Bookings Yet
+            </h5>
 
-        <p class="text-muted">
-            Book your first trek and start exploring.
-        </p>
+            <p class="text-muted">
+                Book your first trek and start exploring.
+            </p>
 
-        <router-link
-            to="/user/treks"
-            class="btn btn-success"
-        >
-            Browse Treks
-        </router-link>
+            <router-link to="/user/treks" class="btn btn-success">
+                Browse Treks
+            </router-link>
 
-    </div>
+        </div>
 
-    <div
-        v-else
-        class="row"
-    >
+        <div v-else class="row">
 
-        <div
-            class="col-lg-4 col-md-6 mb-4"
-            v-for="booking in bookings"
-            :key="booking.id"
-        >
+            <div class="col-lg-4 col-md-6 mb-4" v-for="booking in bookings" :key="booking.id">
 
-            <div class="card h-100 shadow-sm border-0 booking-card">
+                <div class="card h-100 shadow-sm border-0 booking-card">
 
-                <img
-                    :src="booking.trek_image"
-                    class="card-img-top booking-image"
-                >
+                    <img :src="booking.trek_image" class="card-img-top booking-image">
 
-                <div class="card-body">
+                    <div class="card-body">
 
-                    <h5 class="fw-bold">
-                        {{ booking.trek_name }}
-                    </h5>
+                        <h5 class="fw-bold">
+                            {{ booking.trek_name }}
+                        </h5>
 
-                    <p class="text-muted">
-                        Booking Date:
-                        {{
-                            formatDate(
-                                booking.booking_date
+                        <p class="text-muted">
+                            Booking Date:
+                            {{
+                                formatDate(
+                                    booking.booking_date
+                                )
+                            }}
+                        </p>
+
+                        <p>
+                            People:
+                            <strong>
+                                {{ booking.number_of_people }}
+                            </strong>
+                        </p>
+
+                        <div class="mb-2">
+
+                            <span class="badge me-2" :class="bookingStatusClass(
+                                booking.booking_status
                             )
-                        }}
-                    </p>
+                                ">
+                                {{ booking.booking_status }}
+                            </span>
 
-                    <p>
-                        People:
-                        <strong>
-                            {{ booking.number_of_people }}
-                        </strong>
-                    </p>
+                            <span class="badge" :class="paymentStatusClass(
+                                booking.payment_status
+                            )
+                                ">
+                                {{ booking.payment_status }}
+                            </span>
 
-                    <div class="mb-2">
+                            <button v-if="booking.booking_status === 'Booked'"
+                                class="btn btn-outline-danger btn-sm mt-3" @click="cancelBooking(booking.id)">
+                                Cancel Booking
+                            </button>
 
-                        <span
-                            class="badge me-2"
-                            :class="
-                                bookingStatusClass(
-                                    booking.booking_status
-                                )
-                            "
-                        >
-                            {{ booking.booking_status }}
-                        </span>
-
-                        <span
-                            class="badge"
-                            :class="
-                                paymentStatusClass(
-                                    booking.payment_status
-                                )
-                            "
-                        >
-                            {{ booking.payment_status }}
-                        </span>
+                        </div>
 
                     </div>
 
@@ -120,14 +97,13 @@
 
     </div>
 
-</div>
-
 </template>
 
 <script>
 
 import {
-  getBookings
+  getBookings,
+  cancelBooking
 } from '@/services/userServiceUser'
 
 export default {
@@ -158,6 +134,12 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+
+    async cancelBooking (id) {
+      if (!confirm('Cancel this booking?')) return
+      await cancelBooking(id)
+      this.loadBookings()
     },
 
     formatDate (dateString) {
@@ -195,18 +177,16 @@ export default {
 </script>
 
 <style scoped>
-
-.booking-card{
-    transition:.3s;
+.booking-card {
+    transition: .3s;
 }
 
-.booking-card:hover{
-    transform:translateY(-5px);
+.booking-card:hover {
+    transform: translateY(-5px);
 }
 
-.booking-image{
-    height:220px;
-    object-fit:cover;
+.booking-image {
+    height: 220px;
+    object-fit: cover;
 }
-
 </style>

@@ -12,6 +12,12 @@
                 {{ item.name }}
             </router-link>
         </li>
+
+        <div class="sidebar-footer mt-auto pt-4 text-center">
+            <button class="btn btn-outline-light w-10" @click="logout">
+                Logout
+            </button>
+        </div>
     </ul>
 
 </div>
@@ -33,6 +39,13 @@ export default {
         { name: 'Bookings', path: '/admin/bookings' },
         { name: 'Reports', path: '/admin/reports' }
       ]
+    }
+  },
+
+  methods: {
+    logout () {
+      localStorage.clear()
+      this.$router.push('/')
     }
   }
 }

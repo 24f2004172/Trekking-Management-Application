@@ -1,18 +1,22 @@
 <template>
 
-<nav class="navbar navbar-light bg-white shadow-sm px-4">
+    <nav class="navbar navbar-light bg-white shadow-sm px-4">
 
-    <h4 class="mb-0">
-        Admin Dashboard
-    </h4>
+        <h4 class="mb-0">
+            Admin Dashboard
+        </h4>
 
-    <div>
+        <div>
 
-        <strong>Admin</strong>
+            <strong>Admin</strong>
 
-    </div>
+        </div>
 
-</nav>
+        <button class="btn btn-outline-light w-100" @click="logout">
+            Logout
+        </button>
+
+    </nav>
 
 </template>
 
@@ -20,7 +24,17 @@
 
 export default {
 
-  name: 'Navbar'
+  name: 'Navbar',
+
+  methods: {
+
+    logout () {
+      localStorage.clear()
+
+      this.$router.push('/')
+    }
+
+  }
 
 }
 
