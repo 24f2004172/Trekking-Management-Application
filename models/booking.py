@@ -21,7 +21,7 @@ class Booking(db.Model):
 
     booking_date = db.Column(
         db.DateTime,
-        default=datetime.utcnow
+        default=datetime.now()
     )
 
     booking_status = db.Column(
@@ -68,6 +68,7 @@ class Booking(db.Model):
             "booking_status": self.booking_status,
             "payment_status": self.payment_status,
             "number_of_people": self.number_of_people,
+            "user_name": self.user.name if self.user else None,
             "trek_name": self.trek.trek_name if self.trek else None,
             "trek_image": self.trek.image_url if self.trek else None
         }

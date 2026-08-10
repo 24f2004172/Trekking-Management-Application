@@ -41,6 +41,7 @@
       v-if="showModal"
       :trek="selectedTrek"
       :is-edit="isEdit"
+      :staff-members="staffMembers"
       @close="showModal = false"
       @save="saveTrek"
     />
@@ -60,6 +61,7 @@ import {
   updateTrek,
   deleteTrek
 } from '../../services/trekService'
+import { getAllStaffs } from '../../services/staffService'
 
 export default {
   name: 'Treks',
@@ -74,6 +76,8 @@ export default {
   data () {
     return {
       treks: [],
+
+      staffMembers: [],
 
       searchQuery: '',
 
@@ -123,7 +127,10 @@ export default {
   },
 
   async mounted () {
-    await this.loadTreks()
+    await Promise.all([
+      this.loadTreks(),
+      this.loadStaff()
+    ])
   },
 
   methods: {
@@ -132,6 +139,15 @@ export default {
         const response = await getAllTreks()
 
         this.treks = response.data
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    async loadStaff () {
+      try {
+        const response = await getAllStaffs()
+        this.staffMembers = response.data || []
       } catch (error) {
         console.error(error)
       }

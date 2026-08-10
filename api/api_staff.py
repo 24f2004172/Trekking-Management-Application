@@ -140,7 +140,17 @@ def put_status(id):
             "message": f"Status is Invalid or not present"
         })
 
-    trek.status = data.get('status')
+    new_status = data.get("status")
+    trek.status = new_status
+
+    if new_status == "Completed":
+        bookings = Booking.query.filter_by(
+            trek_id=trek.id
+        ).all()
+
+        for booking in bookings:
+            booking.booking_status = "Completed"
+            
     db.session.commit()
 
     return jsonify({

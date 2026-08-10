@@ -1,13 +1,16 @@
 from datetime import timedelta, date
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from utils.decorators import role_required
+
+from utils.export_service import export_booking_history
 
 from extensions import db
 from models.user import User
 from models.trek import Trek
 from models.booking import Booking
+from models.notification import Notification
 from models.staff_profile import StaffProfile
 
 apiUser = Blueprint('apiUser', __name__)
@@ -202,6 +205,41 @@ def get_bookings():
         ]
     }), 200
 
+@apiUser.route('/booking/<int:id>/cancel')
+@jwt_required()
+@role_required('Trekker')
+def cancel_booking(id):
+    user_id = get_jwt_identity()
+
+    booking = Booking.query.filter_by(
+        id=id,
+        user_id=user_id
+    ).first()
+
+    if not booking:
+        return jsonify({
+            "success": False,
+            "message": "Booking not found"
+        }), 404
+
+    if booking.booking_status != "Booked":
+        return jsonify({
+            "success": False,
+            "message": "Only booked treks can be cancelled"
+        }), 400
+
+    trek = Trek.query.get(booking.trek_id)
+
+    trek.available_slots += booking.number_of_people
+
+    booking.booking_status = "Cancelled"
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "message": "Booking cancelled successfully"
+    }), 200
+
 @apiUser.route('/history')
 @jwt_required()
 @role_required('Trekker')
@@ -253,9 +291,9 @@ def update_profile():
         user.name
     )
 
-    user.mobile = data.get(
+    user.phone = data.get(
         "mobile",
-        user.mobile
+        user.phone
     )
 
     db.session.commit()
@@ -264,3 +302,73 @@ def update_profile():
         "success": True,
         "message": "Profile updated"
     }), 200
+
+
+#Export api
+@apiUser.route("/export-history")
+@jwt_required()
+@role_required('Trekker')
+def export_history():
+
+    user_id = get_jwt_identity()
+
+    filename = export_booking_history(user_id)
+
+    notification = Notification(
+        user_id=user_id,
+        message="Your booking history CSV has been generated."
+    )
+
+    db.session.add(notification)
+    db.session.commit()
+
+    return send_file(
+        filename,
+        as_attachment=True
+    )
+
+@apiUser.route("/notifications")
+@jwt_required()
+@role_required('Trekker')
+def notifications():
+
+    user_id = get_jwt_identity()
+
+    data = Notification.query.filter_by(
+        user_id=user_id
+    ).order_by(
+        Notification.created_at.desc()
+    ).all()
+
+    return jsonify([
+        {
+            "id": n.id,
+            "message": n.message,
+            "is_read": n.is_read
+        }
+        for n in data
+    ])
+
+
+@apiUser.route("/notifications/<int:notification_id>/read", methods=["PATCH"])
+@jwt_required()
+@role_required('Trekker')
+def mark_notification_as_read(notification_id):
+
+    user_id = get_jwt_identity()
+
+    notification = Notification.query.filter_by(
+        id=notification_id,
+        user_id=user_id
+    ).first()
+
+    if not notification:
+        return jsonify({"message": "Notification not found"}), 404
+
+    notification.is_read = True
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "message": "Notification marked as read"
+    })

@@ -57,12 +57,12 @@ export default {
           key: 'id'
         },
         {
-          label: 'User ID',
-          key: 'user_id'
+          label: 'User',
+          key: 'user_display'
         },
         {
-          label: 'Trek ID',
-          key: 'trek_id'
+          label: 'Trek',
+          key: 'trek_display'
         },
         {
           label: 'People',
@@ -82,11 +82,15 @@ export default {
 
   computed: {
     filteredBookings () {
-      return this.bookings.filter(booking =>
-        booking.id
-          .toString()
-          .includes(this.searchQuery)
-      )
+      const query = this.searchQuery.toLowerCase()
+
+      return this.bookings.filter(booking => {
+        return [
+          booking.id,
+          booking.user_display,
+          booking.trek_display
+        ].some(value => String(value).toLowerCase().includes(query))
+      })
     }
   },
 
@@ -99,7 +103,11 @@ export default {
       try {
         const response = await getAllBookings()
 
-        this.bookings = response.data
+        this.bookings = response.data.map(booking => ({
+          ...booking,
+          user_display: `${booking.user_id} | ${booking.user_name || 'Unknown user'}`,
+          trek_display: `${booking.trek_id} | ${booking.trek_name || 'Unknown trek'}`
+        }))
       } catch (error) {
         console.error(error)
       }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Monthly Trek Report</title>
+</head>
+
+<body>
+
+    <h1>Monthly Trekking Report</h1>
+
+    <h3>Total Treks Conducted</h3>
+    <p>{{ trek_count }}</p>
+
+    <h3>Total Participants</h3>
+    <p>{{ participant_count }}</p>
+
+    <h3>Popular Treks</h3>
+
+    <table border="1">
+
+        <tr>
+            <th>Trek Name</th>
+            <th>Bookings</th>
+        </tr>
+
+        {% for trek,count in popular_treks %}
+
+        <tr>
+            <td>{{ trek }}</td>
+            <td>{{ count }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</body>
+
+</html>

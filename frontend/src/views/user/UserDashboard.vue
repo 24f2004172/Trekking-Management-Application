@@ -4,15 +4,21 @@
 
     <!-- Welcome -->
 
-    <div class="mb-4">
+    <div class="d-flex justify-content-between align-items-start mb-4">
 
-        <h2 class="fw-bold">
-            Welcome, Trekker 👋
-        </h2>
+        <div>
 
-        <p class="text-muted">
-            Discover your next adventure
-        </p>
+            <h2 class="fw-bold">
+                Welcome, Trekker 👋
+            </h2>
+
+            <p class="text-muted mb-0">
+                Discover your next adventure
+            </p>
+
+        </div>
+
+        <NotificationPanel />
 
     </div>
 
@@ -198,13 +204,16 @@ import {
   getDashboard
 } from '@/services/userServiceUser'
 import TrekCard from '@/components/user/TrekCard.vue'
+import NotificationPanel
+  from '@/components/user/NotificationPanel.vue'
 
 export default {
 
   name: 'UserDashboard',
 
   components: {
-    TrekCard
+    TrekCard,
+    NotificationPanel
   },
 
   data () {

@@ -2,7 +2,11 @@ from datetime import timedelta, date
 from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+
 from utils.decorators import role_required
+from utils.remainder_service import send_daily_reminders
+from flask import render_template
+from utils.report_service import generate_monthly_report
 
 from extensions import db
 from models.user import User
@@ -123,15 +127,17 @@ def profile():
 @jwt_required()
 @role_required("Admin")
 def admin_dashboard():
+    dashboard_data = {
+        "total_treks": Trek.query.count(),
+        "total_staff": User.query.filter_by(role="Staff").count(),
+        "total_users": User.query.filter_by(role="Trekker").count(),
+        "total_bookings": Booking.query.count()
+    }
+
     return jsonify({
         "success": True,
         "message": "Dashboard data fetched successfully",
-        "data": {
-            "total_treks": 12,
-            "total_staff": 5,
-            "total_users": 150,
-            "total_bookings": 72
-        }
+        "data": dashboard_data
     })
 
 @api.route("/admin/treks")
@@ -519,21 +525,30 @@ def updata_status(id):
     }), 200
     
 
+#Daily Remainder route
+@api.route("/admin/send-reminders")
+@jwt_required()
+@role_required("Admin")
+def admin_send_reminders():
 
-# @api.route("/staff/dashboard")
-# @jwt_required()
-# @role_required("Staff")
-# def staff_dashboard():
+    count = send_daily_reminders()
 
-#     return jsonify({
-#         "message": "Welcome Staff"
-#     })
+    return jsonify({
+        "success": True,
+        "sent_count": count,
+        "message": f"{count} user reminders sent"
+    })
 
-# @api.route("/trekker/dashboard")
-# @jwt_required()
-# @role_required("Trekker")
-# def trekker_dashboard():
+@api.route("/admin/monthly-report")
+@jwt_required()
+@role_required("Admin")
+def monthly_report():
 
-#     return jsonify({
-#         "message": "Welcome Trekker"
-#     })
+    data = generate_monthly_report()
+
+    return render_template(
+        "monthly_report.html",
+        trek_count=data["trek_count"],
+        participant_count=data["participant_count"],
+        popular_treks=data["popular_treks"]
+    )

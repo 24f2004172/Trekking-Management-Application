@@ -144,15 +144,26 @@
           <div class="mb-3">
 
             <label class="form-label">
-              Assigned Staff ID
+              Assigned Staff
             </label>
 
-            <input
-              type="number"
+            <select
               v-model.number="form.assigned_staff_id"
-              class="form-control"
+              class="form-select"
               required
             >
+              <option :value="null" disabled>
+                Select staff
+              </option>
+
+              <option
+                v-for="staff in staffMembers"
+                :key="staff.id"
+                :value="staff.id"
+              >
+                {{ staff.id }} | {{ staff.name }}
+              </option>
+            </select>
 
           </div>
 
@@ -305,6 +316,11 @@ export default {
     isEdit: {
       type: Boolean,
       default: false
+    },
+
+    staffMembers: {
+      type: Array,
+      default: () => []
     }
 
   },

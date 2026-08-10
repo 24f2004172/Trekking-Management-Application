@@ -8,6 +8,13 @@
                 My Bookings
             </h2>
 
+            <button
+                class="btn btn-success"
+                @click="downloadCSV"
+            >
+                Export CSV
+            </button>
+
             <p class="text-muted">
                 Track all your trekking adventures
             </p>
@@ -105,6 +112,7 @@ import {
   getBookings,
   cancelBooking
 } from '@/services/userServiceUser'
+import { exportHistory } from '@/services/jobService'
 
 export default {
 
@@ -133,6 +141,26 @@ export default {
         console.error(error)
       } finally {
         this.loading = false
+      }
+    },
+
+    async downloadCSV () {
+      try {
+        const blob = await exportHistory()
+
+        const url = window.URL.createObjectURL(blob)
+
+        const link = document.createElement('a')
+
+        link.href = url
+
+        link.download = 'trek_history.csv'
+
+        link.click()
+
+        window.URL.revokeObjectURL(url)
+      } catch (error) {
+        console.log(error)
       }
     },
 
